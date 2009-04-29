@@ -1,0 +1,10 @@
+Changes
+MANIFEST
+Makefile.PL
+README
+lib/Log/Dispatch/Dir.pm
+t/00-load.t
+t/01-basics.t
+t/02-rotate.t
+t/pod-coverage.t
+t/pod.t

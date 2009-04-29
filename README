@@ -1,0 +1,81 @@
+Log-Dispatch-Dir
+
+Log messages to separate files in a directory, with rotate options.
+
+SYNOPSIS
+
+    use Log::Dispatch::Dir;
+
+    my $dir = Log::Dispatch::Dir->new(
+        name => 'dir1',
+        min_level => 'info',
+        dirname => 'somedir.log',
+        filename_pattern => '%Y%m%d-%H%M%S.%{pid}.html',
+    );
+    $dir->log( level => 'info', message => 'your comment\n" );
+
+    # limit total size
+    my $dir = Log::Dispatch::Dir->new(
+        # ...
+        max_size => 10*1024*1024, # 10MB
+    );
+
+    # limit number of files
+    my $dir = Log::Dispatch::Dir->new(
+        # ...
+        max_files => 1000,
+    );
+
+    # limit oldest file
+    my $dir = Log::Dispatch::Dir->new(
+        # ...
+        max_age => 10*24*3600, # 10 days
+    );
+
+DESCRIPTION
+
+This module provides a simple object for logging to directories under the
+Log::Dispatch::* system, and automatically rotating them according to different
+constraints. Each message will be logged to a separate file the directory.
+
+Logging to separate files can be useful for example when dumping whole network
+responses (like HTTP::Response content).
+
+
+INSTALLATION
+
+To install this module, run the following commands:
+
+	perl Makefile.PL
+	make
+	make test
+	make install
+
+SUPPORT AND DOCUMENTATION
+
+After installing, you can find documentation for this module with the
+perldoc command.
+
+    perldoc Log::Dispatch::Dir
+
+You can also look for information at:
+
+    RT, CPAN's request tracker
+        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Log-Dispatch-Dir
+
+    AnnoCPAN, Annotated CPAN documentation
+        http://annocpan.org/dist/Log-Dispatch-Dir
+
+    CPAN Ratings
+        http://cpanratings.perl.org/d/Log-Dispatch-Dir
+
+    Search CPAN
+        http://search.cpan.org/dist/Log-Dispatch-Dir/
+
+
+COPYRIGHT AND LICENCE
+
+Copyright (C) 2009 Steven Haryanto
+
+This program is free software; you can redistribute it and/or modify it
+under the same terms as Perl itself.
