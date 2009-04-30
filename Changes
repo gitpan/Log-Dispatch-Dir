@@ -1,5 +1,8 @@
 Revision history for Log-Dispatch-Dir
 
+0.02    Thu Apr 30 15:36:42 WIT 2009
+        - add missing dependency: Log::Dispatch::Output (closes #45583)
+
 0.01    Tue Apr 28 23:37:15 WIT 2009
         First version
 

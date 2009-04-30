@@ -9,6 +9,7 @@ build_requires 'Test::More';
 
 requires 'File::Slurp';
 requires 'File::Stat';
+requires 'Log::Dispatch::Output';
 requires 'Params::Validate';
 requires 'POSIX';
 requires 'Taint::Util';
