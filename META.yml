@@ -1,0 +1,20 @@
+---
+abstract: 'Log messages to separate files in a directory, with rotate options'
+author:
+  - 'Steven Haryanto <stevenharyanto@gmail.com>'
+generated_by: 'Dist::Zilla version 1.100520'
+license: perl
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.4.html
+  version: 1.4
+name: Log-Dispatch-Dir
+requires:
+  ExtUtils::MakeMaker: 6.11
+  File::Slurp: 0
+  File::Stat: 0
+  Log::Dispatch: 0
+  POSIX: 0
+  Params::Validate: 0
+  Taint::Util: 0
+  Test::More: 0
+version: 0.03

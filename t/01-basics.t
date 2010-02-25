@@ -2,14 +2,12 @@
 
 use strict;
 use warnings;
-use Test::More tests => 18;
+use Test::More tests => 17;
 use File::Temp qw(tempdir);
 use File::Stat qw(:stat);
 use File::Slurp;
 
-BEGIN {
-    use_ok('Log::Dispatch::Dir');
-}
+use Log::Dispatch::Dir;
 
 #use lib './t';
 #require 'testlib.pm';
