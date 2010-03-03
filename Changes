@@ -1,5 +1,9 @@
 Revision history for Log-Dispatch-Dir
 
+0.05    2010-03-03
+        - use plain ol' stat() instead of File::Stat due to failure in
+          one platform (http://www.cpantesters.org/cpan/report/6877510)
+
 0.04    2010-02-27
         - packaging fix: forgot to add dependency for Pod::Coverage &
           Test::Pod::Coverage

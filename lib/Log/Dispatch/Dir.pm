@@ -1,5 +1,5 @@
 package Log::Dispatch::Dir;
-our $VERSION = '0.04';
+our $VERSION = '0.05';
 # ABSTRACT: Log messages to separate files in a directory, with rotate options
 
 
@@ -9,7 +9,7 @@ use Log::Dispatch::Output;
 use base qw(Log::Dispatch::Output);
 
 use File::Slurp;
-use File::Stat qw(:stat);
+#use File::Stat qw(:stat); # doesn't work in all platforms?
 use Params::Validate qw(validate SCALAR CODEREF);
 use POSIX;
 use Taint::Util;
@@ -136,8 +136,8 @@ sub _rotate {
     while (my $e = readdir DH) {
         untaint $e;
         next if $e eq '.' || $e eq '..';
-        my $st = stat "$d/$e";
-        push @entries, {name => $e, age => ($now-$st->ctime), size => $st->size};
+        my @st = stat "$d/$e";
+        push @entries, {name => $e, age => ($now-$st[10]), size => $st[7]};
     }
     closedir DH;
 
@@ -187,7 +187,7 @@ Log::Dispatch::Dir - Log messages to separate files in a directory, with rotate 
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
