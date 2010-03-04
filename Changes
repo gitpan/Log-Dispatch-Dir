@@ -1,5 +1,8 @@
 Revision history for Log-Dispatch-Dir
 
+0.06    2010-03-04
+        - test file still refers to File::Stat, doh
+
 0.05    2010-03-03
         - use plain ol' stat() instead of File::Stat due to failure in
           one platform (http://www.cpantesters.org/cpan/report/6877510)

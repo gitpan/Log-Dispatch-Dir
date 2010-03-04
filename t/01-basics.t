@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Test::More tests => 17;
 use File::Temp qw(tempdir);
-use File::Stat qw(:stat);
+#use File::Stat qw(:stat);
 use File::Slurp;
 
 use Log::Dispatch::Dir;
@@ -16,12 +16,12 @@ my $dir = tempdir(CLEANUP=>1);
 my $log;
 
 $log = new Log::Dispatch::Dir(name=>'dir1', min_level=>'info', dirname=>"$dir/dir1", permissions=>0700);
-my $st = stat("$dir/dir1");
-is($st->mode & 0777, 0700, "permissions 1");
+my @st = stat("$dir/dir1");
+is($st[2] & 0777, 0700, "permissions 1");
 
 $log = new Log::Dispatch::Dir(name=>'dir1', min_level=>'info', dirname=>"$dir/dir1", permissions=>0750);
-$st = stat("$dir/dir1");
-is($st->mode & 0777, 0750, "permissions 2");
+@st = stat("$dir/dir1");
+is($st[2] & 0777, 0750, "permissions 2");
 
 $log->log_message(message=>101);
 my @f = glob "$dir/dir1/*";

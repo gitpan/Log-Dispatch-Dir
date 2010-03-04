@@ -18,4 +18,4 @@ requires:
   Taint::Util: 0
   Test::More: 0
   Test::Pod::Coverage: 1.08
-version: 0.05
+version: 0.06
