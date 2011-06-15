@@ -3,7 +3,7 @@ NAME
     rotate options
 
 VERSION
-    version 0.06
+    version 0.07
 
 SYNOPSIS
         use Log::Dispatch::Dir;
@@ -122,6 +122,12 @@ METHODS
         %z - the time zone as hour offset from GMT
         %Z - the time zone or name or abbreviation
         %{pid} - Process ID
+        %{ext} - Guessed file extension
+                Try to detect appropriate file extension using
+                File::LibMagic. For example, if log message looks like an
+                HTML document, then 'html'. If File::LibMagic is not
+                available or type cannot be detected, defaults to 'log'.
+
         %% - literal '%' character
 
     *   filename_sub (\&)
@@ -164,45 +170,11 @@ METHODS
 SEE ALSO
     Log::Dispatch
 
-BUGS
-    Known bugs:
-
-    *   Currently only works and tested on Unix
-
-    Please report any other bugs or feature requests to
-    "bug-log-dispatch-dir at rt.cpan.org", or through the web interface at
-    <http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Dispatch-Dir>. I
-    will be notified, and then you'll automatically be notified of progress
-    on your bug as I make changes.
-
-SUPPORT
-    You can find documentation for this module with the perldoc command.
-
-        perldoc Log::Dispatch::Dir
-
-    You can also look for information at:
-
-    *   RT: CPAN's request tracker
-
-        <http://rt.cpan.org/NoAuth/Bugs.html?Dist=Log-Dispatch-Dir>
-
-    *   AnnoCPAN: Annotated CPAN documentation
-
-        <http://annocpan.org/dist/Log-Dispatch-Dir>
-
-    *   CPAN Ratings
-
-        <http://cpanratings.perl.org/d/Log-Dispatch-Dir>
-
-    *   Search CPAN
-
-        <http://search.cpan.org/dist/Log-Dispatch-Dir/>
-
 AUTHOR
-      Steven Haryanto <stevenharyanto@gmail.com>
+    Steven Haryanto <stevenharyanto@gmail.com>
 
 COPYRIGHT AND LICENSE
-    This software is copyright (c) 2010 by Steven Haryanto.
+    This software is copyright (c) 2011 by Steven Haryanto.
 
     This is free software; you can redistribute it and/or modify it under
     the same terms as the Perl 5 programming language system itself.

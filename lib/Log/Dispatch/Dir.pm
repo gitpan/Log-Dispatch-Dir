@@ -1,8 +1,11 @@
 package Log::Dispatch::Dir;
-our $VERSION = '0.06';
+BEGIN {
+  $Log::Dispatch::Dir::VERSION = '0.07';
+}
 # ABSTRACT: Log messages to separate files in a directory, with rotate options
 
 
+use 5.010;
 use warnings;
 use strict;
 use Log::Dispatch::Output;
@@ -35,26 +38,27 @@ sub _make_handle {
     my $self = shift;
 
     my %p = validate(
-                     @_,
-                     {
-                      dirname => { type => SCALAR },
-                      permissions => { type => SCALAR, optional => 1 },
-                      filename_pattern => { type => SCALAR, optional => 1 },
-                      filename_sub => { type => CODEREF, optional => 1 },
-                      max_size => { type => SCALAR, optional => 1 },
-                      max_files => { type => SCALAR, optional => 1 },
-                      max_age => { type => SCALAR, optional => 1 },
-                      rotate_probability => { type => SCALAR, optional => 1 },
-                      });
+        @_,
+        {
+            dirname             => { type => SCALAR },
+            permissions         => { type => SCALAR , optional => 1 },
+            filename_pattern    => { type => SCALAR , optional => 1 },
+            filename_sub        => { type => CODEREF, optional => 1 },
+            max_size            => { type => SCALAR , optional => 1 },
+            max_files           => { type => SCALAR , optional => 1 },
+            max_age             => { type => SCALAR , optional => 1 },
+            rotate_probability  => { type => SCALAR , optional => 1 },
+        });
 
-    $self->{dirname} = $p{dirname};
-    $self->{permissions} = $p{permissions};
-    $self->{filename_pattern} = defined($p{filename_pattern}) ? $p{filename_pattern} : '%Y%m%d-%H%M%S.%{pid}';
-    $self->{filename_sub} = $p{filename_sub};
-    $self->{max_size} = $p{max_size};
-    $self->{max_files} = $p{max_files};
-    $self->{max_age} = $p{max_age};
-    $self->{rotate_probability} = defined($p{rotate_probability}) ? $p{rotate_probability} : 0.25;
+    $self->{dirname}            = $p{dirname};
+    $self->{permissions}        = $p{permissions};
+    $self->{filename_pattern}   = $p{filename_pattern} //
+        '%Y%m%d-%H%M%S.%{pid}.%{ext}';
+    $self->{filename_sub}       = $p{filename_sub};
+    $self->{max_size}           = $p{max_size};
+    $self->{max_files}          = $p{max_files};
+    $self->{max_age}            = $p{max_age};
+    $self->{rotate_probability} = ($p{rotate_probability}) // 0.25;
     $self->_open_dir();
 }
 
@@ -62,7 +66,7 @@ sub _open_dir {
     my $self = shift;
 
     unless (-e $self->{dirname}) {
-        my $perm = defined($self->{permissions}) ? $self->{permissions} : 0755;
+        my $perm = $self->{permissions} // 0755;
         mkdir($self->{dirname}, $perm)
             or die "Cannot create directory `$self->{dirname}: $!";
         $self->{chmodded} = 1;
@@ -79,23 +83,52 @@ sub _open_dir {
     }
 }
 
+my $default_ext = "log";
+my $libmagic;
+
 sub _resolve_pattern {
-    my ($self) = @_;
+    my ($self, $p) = @_;
     my $pat = $self->{filename_pattern};
     my $now = time;
 
     my @vars = qw(Y y m d H M S z Z %);
-    my $strftime = POSIX::strftime(join("|", map {"%$_"} @vars), localtime($now));
+    my $strftime = POSIX::strftime(join("|", map {"%$_"} @vars),
+                                   localtime($now));
     my %vars;
     my $i = 0;
     for (split /\|/, $strftime) {
         $vars{ $vars[$i] } = $_;
         $i++;
     }
-    push @vars, "{pid}"; $vars{"{pid}"} = $$;
+
+    push @vars, "{pid}";
+    $vars{"{pid}"} = $$;
+
+    push @vars, "{ext}";
+    $vars{"{ext}"} = sub {
+        my $p = shift;
+        unless (defined $libmagic) {
+            if (eval { require File::LibMagic; require Media::Type::Simple }) {
+                $libmagic = File::LibMagic->new;
+            } else {
+                print "err = $@\n";
+                $libmagic = 0;
+            }
+        }
+        return $default_ext."0" unless $libmagic;
+        my $type = $libmagic->checktype_contents($p->{message} // '');
+        return $default_ext."1" unless $type;
+        $type =~ s/;.+//;
+        my $ext = Media::Type::Simple::ext_from_type($type);
+        return $ext || $default_ext."2";
+    };
+
     my $res = $pat;
     $res =~ s[%(\{\w+\}|\S)]
-             [defined($vars{$1}) ? $vars{$1} : die("Invalid filename_pattern `%$1'")]eg;
+             [defined($vars{$1}) ?
+                  ( ref($vars{$1}) eq 'CODE' ?
+                        $vars{$1}->($p) : $vars{$1} ) :
+                            die("Invalid filename_pattern `%$1'")]eg;
     $res;
 }
 
@@ -106,7 +139,7 @@ sub log_message {
 
     my $filename0 = defined($self->{filename_sub}) ?
         $self->{filename_sub}->(%p) :
-        $self->_resolve_pattern();
+        $self->_resolve_pattern(\%p);
 
     my $filename = $filename0;
     my $i = 0;
@@ -116,11 +149,11 @@ sub log_message {
     }
 
     write_file("$self->{dirname}/$filename", $p{message});
-    $self->_rotate() if (rand() < $self->{rotate_probability});
+    $self->_rotate(\%p) if (rand() < $self->{rotate_probability});
 }
 
 sub _rotate {
-    my ($self) = @_;
+    my ($self, $p) = @_;
 
     my $ms = $self->{max_size};
     my $mf = $self->{max_files};
@@ -187,7 +220,7 @@ Log::Dispatch::Dir - Log messages to separate files in a directory, with rotate 
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -320,6 +353,12 @@ Available pattern:
 
 =item %{pid} - Process ID
 
+=item %{ext} - Guessed file extension
+
+Try to detect appropriate file extension using L<File::LibMagic>. For example,
+if log message looks like an HTML document, then 'html'. If File::LibMagic is
+not available or type cannot be detected, defaults to 'log'.
+
 =item %% - literal '%' character
 
 =back
@@ -368,57 +407,13 @@ Log::Dispatch::Output).
 
 L<Log::Dispatch>
 
-=head1 BUGS
-
-Known bugs:
-
-=over 4
-
-=item * Currently only works and tested on Unix
-
-=back
-
-Please report any other bugs or feature requests to C<bug-log-dispatch-dir at
-rt.cpan.org>, or through the web interface at
-L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Log-Dispatch-Dir>. I will be
-notified, and then you'll automatically be notified of progress on your bug as I
-make changes.
-
-=head1 SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Log::Dispatch::Dir
-
-You can also look for information at:
-
-=over 4
-
-=item * RT: CPAN's request tracker
-
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Log-Dispatch-Dir>
-
-=item * AnnoCPAN: Annotated CPAN documentation
-
-L<http://annocpan.org/dist/Log-Dispatch-Dir>
-
-=item * CPAN Ratings
-
-L<http://cpanratings.perl.org/d/Log-Dispatch-Dir>
-
-=item * Search CPAN
-
-L<http://search.cpan.org/dist/Log-Dispatch-Dir/>
-
-=back
-
 =head1 AUTHOR
 
-  Steven Haryanto <stevenharyanto@gmail.com>
+Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Steven Haryanto.
+This software is copyright (c) 2011 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

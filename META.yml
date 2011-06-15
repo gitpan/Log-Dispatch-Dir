@@ -2,20 +2,25 @@
 abstract: 'Log messages to separate files in a directory, with rotate options'
 author:
   - 'Steven Haryanto <stevenharyanto@gmail.com>'
-generated_by: 'Dist::Zilla version 1.100520'
+build_requires:
+  Module::Build: 0.3601
+configure_requires:
+  Module::Build: 0.3601
+dynamic_config: 0
+generated_by: 'Dist::Zilla version 4.200007, CPAN::Meta::Converter version 2.110930'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
 name: Log-Dispatch-Dir
 requires:
-  ExtUtils::MakeMaker: 6.11
   File::Slurp: 0
   Log::Dispatch: 0
   POSIX: 0
   Params::Validate: 0
-  Pod::Coverage: 0.18
   Taint::Util: 0
-  Test::More: 0
-  Test::Pod::Coverage: 1.08
-version: 0.06
+  perl: 5.010000
+resources:
+  homepage: http://search.cpan.org/dist/Log-Dispatch-Dir/
+  repository: http://github.com/sharyanto/perl-Log-Dispatch-Dir
+version: 0.07
