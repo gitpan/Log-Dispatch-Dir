@@ -1,6 +1,6 @@
 package Log::Dispatch::Dir;
 BEGIN {
-  $Log::Dispatch::Dir::VERSION = '0.08';
+  $Log::Dispatch::Dir::VERSION = '0.09';
 }
 # ABSTRACT: Log messages to separate files in a directory, with rotate options
 
@@ -52,13 +52,13 @@ sub _make_handle {
 
     $self->{dirname}            = $p{dirname};
     $self->{permissions}        = $p{permissions};
-    $self->{filename_pattern}   = $p{filename_pattern} //
+    $self->{filename_pattern}   = $p{filename_pattern} ||
         '%Y-%m-%d-%H%M%S.pid-%{pid}.%{ext}';
     $self->{filename_sub}       = $p{filename_sub};
     $self->{max_size}           = $p{max_size};
     $self->{max_files}          = $p{max_files};
     $self->{max_age}            = $p{max_age};
-    $self->{rotate_probability} = ($p{rotate_probability}) // 0.25;
+    $self->{rotate_probability} = ($p{rotate_probability}) || 0.25;
     $self->_open_dir();
 }
 
@@ -115,12 +115,12 @@ sub _resolve_pattern {
                 $libmagic = 0;
             }
         }
-        return $default_ext."0" unless $libmagic;
+        return $default_ext unless $libmagic;
         my $type = $libmagic->checktype_contents($p->{message} // '');
-        return $default_ext."1" unless $type;
-        $type =~ s/;.+//;
+        return $default_ext unless $type;
+        $type =~ s/[; ].*//; # only get the mime type
         my $ext = Media::Type::Simple::ext_from_type($type);
-        return $ext || $default_ext."2";
+        return $ext || $default_ext;
     };
 
     my $res = $pat;
@@ -220,7 +220,7 @@ Log::Dispatch::Dir - Log messages to separate files in a directory, with rotate 
 
 =head1 VERSION
 
-version 0.08
+version 0.09
 
 =head1 SYNOPSIS
 

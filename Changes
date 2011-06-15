@@ -1,5 +1,10 @@
 Revision history for Log-Dispatch-Dir
 
+0.09    2011-06-15
+
+        No functional changes. Fix a couple of stupid bugs.
+
+
 0.08    2011-06-15
 
         No functional changes. Tweak default filename_pattern to be:
