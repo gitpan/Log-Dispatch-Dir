@@ -1,5 +1,11 @@
 Revision history for Log-Dispatch-Dir
 
+0.08    2011-06-15
+
+        No functional changes. Tweak default filename_pattern to be:
+        '%Y-%m-%d-%H%M%S.pid-%{pid}.%{ext}'.
+
+
 0.07    2011-06-15
 
         [ENHANCEMENTS]

@@ -23,4 +23,4 @@ requires:
 resources:
   homepage: http://search.cpan.org/dist/Log-Dispatch-Dir/
   repository: http://github.com/sharyanto/perl-Log-Dispatch-Dir
-version: 0.07
+version: 0.08

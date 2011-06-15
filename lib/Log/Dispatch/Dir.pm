@@ -1,6 +1,6 @@
 package Log::Dispatch::Dir;
 BEGIN {
-  $Log::Dispatch::Dir::VERSION = '0.07';
+  $Log::Dispatch::Dir::VERSION = '0.08';
 }
 # ABSTRACT: Log messages to separate files in a directory, with rotate options
 
@@ -53,7 +53,7 @@ sub _make_handle {
     $self->{dirname}            = $p{dirname};
     $self->{permissions}        = $p{permissions};
     $self->{filename_pattern}   = $p{filename_pattern} //
-        '%Y%m%d-%H%M%S.%{pid}.%{ext}';
+        '%Y-%m-%d-%H%M%S.pid-%{pid}.%{ext}';
     $self->{filename_sub}       = $p{filename_sub};
     $self->{max_size}           = $p{max_size};
     $self->{max_files}          = $p{max_files};
@@ -220,7 +220,7 @@ Log::Dispatch::Dir - Log messages to separate files in a directory, with rotate 
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 
@@ -230,7 +230,7 @@ version 0.07
         name => 'dir1',
         min_level => 'info',
         dirname => 'somedir.log',
-        filename_pattern => '%Y%m%d-%H%M%S.%{pid}.html',
+        filename_pattern => '%Y-%m-%d-%H%M%S.%{ext}',
     );
     $dir->log( level => 'info', message => 'your comment\n" );
 
@@ -324,7 +324,7 @@ message once.
 =item * filename_pattern ($)
 
 Names to give to each file, expressed in pattern a la strftime()'s. Optional.
-Default is '%Y%m%d-%H%M%S.%{pid}'. Time is expressed in local time.
+Default is '%Y-%m-%d-%H%M%S.pid-%{pid}.%{ext}'. Time is expressed in local time.
 
 If file of the same name already exists, a suffix ".1", ".2", and so on will be
 appended.

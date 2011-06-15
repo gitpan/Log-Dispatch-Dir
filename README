@@ -3,7 +3,7 @@ NAME
     rotate options
 
 VERSION
-    version 0.07
+    version 0.08
 
 SYNOPSIS
         use Log::Dispatch::Dir;
@@ -12,7 +12,7 @@ SYNOPSIS
             name => 'dir1',
             min_level => 'info',
             dirname => 'somedir.log',
-            filename_pattern => '%Y%m%d-%H%M%S.%{pid}.html',
+            filename_pattern => '%Y-%m-%d-%H%M%S.%{ext}',
         );
         $dir->log( level => 'info', message => 'your comment\n" );
 
@@ -104,8 +104,8 @@ METHODS
     *   filename_pattern ($)
 
         Names to give to each file, expressed in pattern a la strftime()'s.
-        Optional. Default is '%Y%m%d-%H%M%S.%{pid}'. Time is expressed in
-        local time.
+        Optional. Default is '%Y-%m-%d-%H%M%S.pid-%{pid}.%{ext}'. Time is
+        expressed in local time.
 
         If file of the same name already exists, a suffix ".1", ".2", and so
         on will be appended.

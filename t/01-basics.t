@@ -40,7 +40,7 @@ is(join(".", map {read_file($_)} @f), "101.102.103", "log_message 3b");
 
 # default filename_pattern: %Y%m%d-%H%M%S.%{pid}.%{ext}
 for (my $i=0; $i<@f; $i++) {
-    like($f[$i], qr!^.+/\d{4}\d{2}\d{2}-\d{2}\d{2}\d{2}\.$$\.\w+(\.\d+)?$!, "default filename_pattern $i");
+    like($f[$i], qr!^.+/\d{4}-\d{2}-\d{2}-\d{2}\d{2}\d{2}\.pid-$$\.\w+(\.\d+)?$!, "default filename_pattern $i");
 }
 
 # filename_pattern
