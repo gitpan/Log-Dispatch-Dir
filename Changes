@@ -1,5 +1,10 @@
 Revision history for Log-Dispatch-Dir
 
+0.10    2011-06-17
+
+        No functional changes. Fix failing tests [CT].
+
+
 0.09    2011-06-15
 
         No functional changes. Fix a couple of stupid bugs.

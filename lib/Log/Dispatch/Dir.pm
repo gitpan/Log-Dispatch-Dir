@@ -1,6 +1,6 @@
 package Log::Dispatch::Dir;
 BEGIN {
-  $Log::Dispatch::Dir::VERSION = '0.09';
+  $Log::Dispatch::Dir::VERSION = '0.10';
 }
 # ABSTRACT: Log messages to separate files in a directory, with rotate options
 
@@ -220,7 +220,7 @@ Log::Dispatch::Dir - Log messages to separate files in a directory, with rotate 
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 

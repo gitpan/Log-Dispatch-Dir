@@ -15,9 +15,17 @@ use Log::Dispatch::Dir;
 my $dir = tempdir(CLEANUP=>1);
 my $log;
 
-$log = new Log::Dispatch::Dir(name=>'dir1', min_level=>'info', dirname=>"$dir/dir1", permissions=>0700);
-my @st = stat("$dir/dir1");
-is($st[2] & 0777, 0700, "permissions 1");
+# XXX should've test for filesystem ability, not OS
+my @st;
+subtest "permissions" => sub {
+    use Probe::Perl;
+    my $pp = Probe::Perl->new;
+    plan skip_all => "non-Unix platform" if $pp->os_type ne 'Unix';
+
+    $log = new Log::Dispatch::Dir(name=>'dir1', min_level=>'info', dirname=>"$dir/dir1", permissions=>0700);
+    @st = stat("$dir/dir1");
+    is($st[2] & 0777, 0700, "permissions 1");
+};
 
 $log = new Log::Dispatch::Dir(name=>'dir1', min_level=>'info', dirname=>"$dir/dir1", permissions=>0750);
 @st = stat("$dir/dir1");
@@ -64,7 +72,7 @@ if (eval { require File::LibMagic; require Media::Type::Simple }) {
 } else {
     diag "Warning: File::LibMagic and/or Media::Type::Simple not available, will only be testing default extension";
     like($f[0], qr!/log$!, "filename_pattern ext: log (1)");
-    like($f[1], qr!/log$!, "filename_pattern ext: log (2)");
+    like($f[1], qr!/log(\.1)?$!, "filename_pattern ext: log (2)");
 }
 
 # filename_sub

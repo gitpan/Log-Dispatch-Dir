@@ -17,7 +17,7 @@ my %module_build_args = (
     'Steven Haryanto <stevenharyanto@gmail.com>'
   ],
   'dist_name' => 'Log-Dispatch-Dir',
-  'dist_version' => '0.09',
+  'dist_version' => '0.10',
   'license' => 'perl',
   'module_name' => 'Log::Dispatch::Dir',
   'recommends' => {},
@@ -27,6 +27,7 @@ my %module_build_args = (
     'Log::Dispatch' => '0',
     'POSIX' => '0',
     'Params::Validate' => '0',
+    'Probe::Perl' => '0',
     'Taint::Util' => '0',
     'perl' => '5.010000'
   },

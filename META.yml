@@ -18,9 +18,10 @@ requires:
   Log::Dispatch: 0
   POSIX: 0
   Params::Validate: 0
+  Probe::Perl: 0
   Taint::Util: 0
   perl: 5.010000
 resources:
   homepage: http://search.cpan.org/dist/Log-Dispatch-Dir/
   repository: http://github.com/sharyanto/perl-Log-Dispatch-Dir
-version: 0.09
+version: 0.10
