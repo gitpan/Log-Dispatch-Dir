@@ -1,22 +1,28 @@
 Revision history for Log-Dispatch-Dir
 
-0.10    2011-06-17
+0.11     2013-09-09 (SHARYANTO)
 
-        No functional changes. Fix failing tests [CT].
-
-
-0.09    2011-06-15
-
-        No functional changes. Fix a couple of stupid bugs.
+         - No functional changes. Rebuild with MakeMaker instead of
+           Module::Build because the latter is deprecated from core in 5.19.
 
 
-0.08    2011-06-15
+0.10    2011-06-17 (SHARYANTO)
 
-        No functional changes. Tweak default filename_pattern to be:
+        - No functional changes. Fix failing tests [CT].
+
+
+0.09    2011-06-15 (SHARYANTO)
+
+        - No functional changes. Fix a couple of stupid bugs.
+
+
+0.08    2011-06-15 (SHARYANTO)
+
+        - No functional changes. Tweak default filename_pattern to be:
         '%Y-%m-%d-%H%M%S.pid-%{pid}.%{ext}'.
 
 
-0.07    2011-06-15
+0.07    2011-06-15 (SHARYANTO)
 
         [ENHANCEMENTS]
 
@@ -27,23 +33,32 @@ Revision history for Log-Dispatch-Dir
         - Default filename pattern now contains %{ext} pattern.
 
 
-0.06    2010-03-04
+0.06    2010-03-04 (SHARYANTO)
+
         - test file still refers to File::Stat, doh
 
-0.05    2010-03-03
-        - use plain ol' stat() instead of File::Stat due to failure in
-          one platform (http://www.cpantesters.org/cpan/report/6877510)
 
-0.04    2010-02-27
+0.05    2010-03-03 (SHARYANTO)
+
+        - use plain ol' stat() instead of File::Stat due to failure in one
+          platform (http://www.cpantesters.org/cpan/report/6877510)
+
+
+0.04    2010-02-27 (SHARYANTO)
+
         - packaging fix: forgot to add dependency for Pod::Coverage &
           Test::Pod::Coverage
 
-0.03    2010-02-26
+0.03    2010-02-26 (SHARYANTO)
+
         - switch to Dist::Zilla (to generate META.yml and become installable by cpanm)
 
-0.02    Thu Apr 30 15:36:42 WIT 2009
+
+0.02    2009-04-30 (SHARYANTO)
+
         - add missing dependency: Log::Dispatch::Output (closes #45583)
 
-0.01    Tue Apr 28 23:37:15 WIT 2009
-        First version
 
+0.01    2009-04-28 (SHARYANTO)
+
+        - First version

@@ -1,11 +1,6 @@
 package Log::Dispatch::Dir;
-BEGIN {
-  $Log::Dispatch::Dir::VERSION = '0.10';
-}
-# ABSTRACT: Log messages to separate files in a directory, with rotate options
 
-
-use 5.010;
+use 5.010001;
 use warnings;
 use strict;
 use Log::Dispatch::Output;
@@ -17,8 +12,9 @@ use Params::Validate qw(validate SCALAR CODEREF);
 use POSIX;
 use Taint::Util;
 
-Params::Validate::validation_options( allow_extra => 1 );
+our $VERSION = '0.11'; # VERSION
 
+Params::Validate::validation_options( allow_extra => 1 );
 
 sub new {
     my $proto = shift;
@@ -132,7 +128,6 @@ sub _resolve_pattern {
     $res;
 }
 
-
 sub log_message {
     my $self = shift;
     my %p = @_;
@@ -208,10 +203,11 @@ sub _rotate {
     }
 }
 
-
 1;
+# ABSTRACT: Log messages to separate files in a directory, with rotate options
 
 __END__
+
 =pod
 
 =head1 NAME
@@ -220,7 +216,7 @@ Log::Dispatch::Dir - Log messages to separate files in a directory, with rotate 
 
 =head1 VERSION
 
-version 0.10
+version 0.11
 
 =head1 SYNOPSIS
 
@@ -413,10 +409,9 @@ Steven Haryanto <stevenharyanto@gmail.com>
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Steven Haryanto.
+This software is copyright (c) 2013 by Steven Haryanto.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.
 
 =cut
-
