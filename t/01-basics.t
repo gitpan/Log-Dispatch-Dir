@@ -5,7 +5,7 @@ use warnings;
 use Test::More;
 use File::Temp qw(tempdir);
 #use File::Stat qw(:stat);
-use File::Slurp;
+use File::Slurp::Tiny qw(read_file);
 
 use Log::Dispatch::Dir;
 

@@ -1,5 +1,12 @@
 Revision history for Log-Dispatch-Dir
 
+0.12    2014-05-17 (SHARYANTO)
+
+        - No functional changes.
+
+        - Replace File::Slurp with File::Slurp::Tiny.
+
+
 0.11     2013-09-09 (SHARYANTO)
 
          - No functional changes. Rebuild with MakeMaker instead of
